@@ -1,0 +1,161 @@
+/*  Info
+--------------------------------------------------------------------------------------*/
+/*  Styles for Headscape CMS4
+    Created by Ed Merritt
+    18th October 2007
+--------------------------------------------------------------------------------------*/
+
+
+/*  Structure
+--------------------------------------------------------------------------------------*/
+ul, li, div, span, a, dl, dt, dd {font-size: 100%; margin: 0; padding: 0; line-height: 1.3em;}
+
+
+.col01 {position: relative; float: left; margin:0 1.5em 0 1em; width:96%;}
+
+
+.page {position: relative;float: left; display: block; width: 100%; /*margin: 12px 0 2.3em 1.3em;*/ background: none top left no-repeat #fff;}
+.page_inner {float: left; display: block; width: 100%;}
+
+
+
+#pagemap a {cursor: pointer;color:#414040;}
+
+
+
+
+#pagemap, #dragHelper {display: block; margin: 0; list-style: none;}
+#dragHelper { background: #eee;}
+#pagemap ul, #dragHelper ul {font-size: 1em; list-style: none;}
+#pagemap li, #dragHelper li {display: block; width: 100%; display: block; clear: both; }
+#pagemap dl, #dragHelper div {position: relative; display: block; height: 19px; border-top: 1px solid #eee; background:#fff; }
+#pagemap dt, #dragHelper dt {float: left; font-weight: bold; font-size: 1.1em; line-height: 1em; margin-left: 16px; padding: 2px 0 0 1px;}
+#pagemap dt{position: relative; top:2px;}
+#pagemap dd, #dragHelper dd {float: left;}
+#pagemap .sm2_actions, #dragHelper .sm2_actions {display: none; padding: 3px 2px 0 5px;}
+#pagemap .sm2_status, #dragHelper .sm2_status {position: absolute; top: 7px; right: 0;}
+#pagemap .sm2_status a{
+    margin-left:40px;
+     margin-right:30px;
+}
+
+#pagemap dl:hover dd, #pagemap dd:hover {display: block;}
+#pagemap dd strong, #dragHelper dd strong {display: none;}
+#pagemap a, #dragHelper a {border: none;}
+#pagemap .sm2_expander, #dragHelper .sm2_expander {position: absolute; left: 0; top: 4px;}
+
+#pagemap .sm2_liOpen > dl > .sm2_expander, #dragHelper .sm2_liOpen > dl > .sm2_expander {display: block; width: 15px; height: 1em; background: url(../images/excol_open.gif) 50% 50% no-repeat;}
+#pagemap .sm2_liClosed > dl > .sm2_expander, #dragHelper .sm2_liClosed > dl > .sm2_expander {display: block; width: 15px; height: 1em; background: url(../images/excol_closed.gif) 50% 50% no-repeat;}
+#pagemap .sm2_liClosed ul, #dragHelper .sm2_liClosed ul {display: none;}
+
+.sm2_pub{display: block; float: left; width: 16px; height: 16px; text-indent: -5000px; margin: 0 1px 0 0; background: url(../images/sm2_move.png) top left no-repeat;}
+
+
+#pagemap .dropzone { height:6px; background-color:#fff; border-bottom:4px solid #fff; }
+
+.drag_handle{
+        vertical-align: middle;
+        position: relative;
+        top: 6px;
+        margin-right: 3px;
+        float: left;
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        text-indent: -99999px;
+        background:transparent url(../images/grip.png) no-repeat 100% 50% scroll;
+    }
+ #pagemap .sm2_expander, #dragHelper .sm2_expander {
+    position: absolute;
+    left: 18px;
+    top: 5px;
+    text-decoration: none;
+}
+.col01 ul ul{
+    padding-left: 20px;
+}
+
+.albumDisplay{
+    float: left;
+    height: 130px;
+    padding: 15px 5px 0 5px;
+    margin: 0 9px 18px;
+    border: 1px solid #ccc;
+    position: relative;
+    word-wrap: break-word;
+    
+}
+.albumDisplay img{
+    position: relative;
+    z-index: 5;
+}
+.icon_overlay{
+    position: absolute;
+    z-index: 9;
+    top: 85px;
+    left: -3px;
+    text-align: right;
+    width: 90px;
+    height: 30px;
+}
+.icon_overlay a{
+    
+    margin: 0 5px;
+}
+.icon_overlay a img{
+    background-color: #FFF;
+    padding: 3px;}
+.icon_overlay a img.albumEdit{
+    padding-bottom: 2px;
+    padding-top: 2px;}
+.albumName{
+    text-decoration: none;
+    text-align: center;
+    width: 92px;
+}
+.albumImage{
+   /* background:url(../images/album/folderIcon.png) no-repeat; */
+    width: 90px;
+    height: 90px;
+}
+.viewImage{
+
+    width: 92px;
+    height: 92px;
+}
+
+.iconAdjust    {
+    padding-right: 8px;
+    padding-top: 59px;
+    text-align: right;
+}
+.iconAdjust  a  img{
+    background-color: #FFF;
+    padding: 3px;
+}
+.iconAdjust  a  img.albumEdit{
+    padding:2px 3px;
+}
+.iconAdjust a{
+    margin:0  5px;
+}
+.iconAdjust1    {
+    padding-top: 20px;
+}
+
+.albumEdit  {
+    float: right;
+    
+}
+.changeName {
+    
+}
+.AlbumNameChange{
+    
+}
+
+div.albumName div.action{
+    display:none;
+/*    position: absolute;
+    top: 28px;*/
+}

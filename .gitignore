@@ -1,0 +1,12 @@
+# Cache, session files and logs
+/logs/*
+/public/templates_c/*
+
+# PHPstorm
+!.idea
+
+# Managed by Composer
+/vendor/
+
+# Composer PHAR
+/composer.phar

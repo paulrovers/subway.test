@@ -1,0 +1,13 @@
+{
+    "require": {
+        "smarty/smarty": "^3.1",
+        "twig/twig": "^3.2",
+        "phpmailer/phpmailer": "^6.2"
+    },
+    "autoload": {
+        "psr-4": {
+             "Core\\": "Core/",
+             "App\\": "App/"
+        }
+    }
+}

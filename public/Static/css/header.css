@@ -1,0 +1,195 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	#background: url("/Static/common/images/bg.png") no-repeat scroll 50% 150px transparent;
+}
+.wrapper {
+    margin: 0 auto;
+    width: 970px;
+    position: relative;
+}
+.logo_mijn{
+    position: absolute;
+    left: 0;
+    float: left;
+    top: 10px;
+    cursor: pointer;
+    display: inline-block;
+}
+.topbar {
+    background-color: #5B5B5D;
+    color: #FFFFFF;
+    font-size: 11px;
+    height: 41px;
+    line-height: 38px;
+    text-align: right;
+    vertical-align: middle;
+    position: relative;
+    z-index: 9000;
+}
+.navbar {
+    background-color: #F4F4F4;
+    border-bottom: 1px solid #E5E5E5;
+    height: 89px;
+   
+}
+.nav {
+    padding: 21px 0 0 0;
+    margin:0;
+    border:0 none;
+	list-style: none outside none;
+}
+.nav li {
+    display: block;
+    float: left;
+    width: 58px;
+}
+
+#lighter1, #lighter2{
+background-color: #f19d60;
+}
+
+.nav li a {
+    -moz-transition: all 200ms ease-in 0s;
+	 -webkit-transition: all 200ms ease-in 0s;
+	 transition: all 200ms ease-in 0s;
+    background-color: #EC7C2A;
+    border-radius: 3px 3px 3px 3px;
+    display: block;
+    height: 48px;
+    position: relative;
+    width: 48px;
+}
+
+.nav li a:hover {
+    background-color: #5B5B5D;
+}
+.nf{
+	display:none;
+}
+.right_search form {
+    display: inline-block;
+    float: right;
+}
+.right_search form fieldset {
+    padding: 10px 0 0 0;
+	margin:0;
+	border:none 0;
+}
+.select {
+    background-color: #FFFFFF;
+    border: 1px solid #B3B3B3;
+    display: inline-block;
+    float: left;
+    margin: 0 5px;
+    min-width: 250px;
+    padding: 5px;
+}
+.arr_submit {
+	-moz-transition: all 200ms ease-in 0s;
+	 -webkit-transition: all 200ms ease-in 0s;
+	 transition: all 200ms ease-in 0s;
+    border:none 0;
+	-moz-border-radius:0;
+	-webkit-border-radius:0;
+	border-radius:0;
+    background: url("/Static/common/images/arr_r.png") no-repeat scroll 50% 50% #EC7C2A;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+    height: 30px;
+    width: 30px;
+}
+.arr_submit:hover {
+    background-color: #666666;
+}
+#loggedin {
+    float: right;
+    display: inline-block;
+    padding: 10px 0 0;
+}
+.topbar a {
+    float: left;
+    color: #FFFFFF;
+    margin: 0 2px;
+
+}
+.topbar .user_email{
+    
+   
+}
+.topbar a:hover {
+    color: orange;
+}
+.topbar a img {
+    
+    vertical-align: middle;
+}
+#footer{
+	border-top: 1px solid #DADADA;
+    font-size: 11px;
+    margin-top: 50px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+.tb_menu2{
+    margin: 0;
+    padding: 0;
+    float: left;
+   width: 228px;
+    height: 22px;
+    margin-right: 5px;
+    
+}
+.tb_menu2 li{
+    display: block; 
+    background-color: #727272;
+   width:228px;
+    height: 22px;
+    line-height: 22px;
+   
+    position: relative;
+    
+}
+.tb_menu2 li a{
+    margin: 0;
+    float: none;
+    clear: both;
+    text-align: left;
+    display: block;
+    padding: 0 10px;
+    height: 22px;
+    line-height: 20px;
+    text-decoration: none;
+}
+.tb_menu2 li li{
+    border-top: 1px solid #c4c4c4;
+    height: 22px;
+    line-height: 22px;
+    
+}
+.tb_menu2 ol{
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 22px;
+    left: 0px;
+    display: none;
+}
+.tb_menu2 li:hover ol{
+    display: block;
+}
+.tb_menu2:hover li, .tb_menu2:hover li a{
+    background-color: #e8e8e8;
+    color: #5b5b5d;
+}
+
+.tb_menu2 li a{
+    background: transparent url("/Static/images/a_dwn.png") no-repeat 95% 50% scroll;
+}
+.tb_menu2 li li a{
+    background-image: none;
+}
+.tb_menu2 li a:hover {
+    background-color: #FFF;
+}
