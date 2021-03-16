@@ -67,7 +67,7 @@ CREATE TABLE `pages`  (
 -- ----------------------------
 -- Records of pages
 -- ----------------------------
-INSERT INTO `pages` VALUES (1, 'Welcome at the subway test', 'Login details:<br>\r\n<br>\r\nemail: paul@jenda.nl<br>\r\npassword: admin<br>', '', 1, 'wow this meta desciption is awesome!', 'subway test', 'subway test');
+INSERT INTO `pages` VALUES (1, 'Welcome at the subway test', 'Login details:<br>\r\n<br>\r\nemail: paul@rovers.nl<br>\r\npassword: admin<br>', '', 1, 'wow this meta desciption is awesome!', 'subway test', 'subway test');
 
 -- ----------------------------
 -- Table structure for sandwiches
@@ -127,7 +127,7 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'Paul Rovers', 'paul@jenda.nl', '$2y$14$V/Tdj4j1m6iUj0u7znMUjOebrcDe6oIh4OSSoQVJfUR8iUUFUqr8u', NULL, NULL, NULL, 1);
+INSERT INTO `users` VALUES (1, 'Paul Rovers', 'paul@rovers.nl', '$2y$14$V/Tdj4j1m6iUj0u7znMUjOebrcDe6oIh4OSSoQVJfUR8iUUFUqr8u', NULL, NULL, NULL, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
 
