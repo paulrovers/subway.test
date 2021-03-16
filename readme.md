@@ -6,6 +6,8 @@ current url set for project http://subway.test
 
 smtp account login & mysql connection are required
 
+run composer install to get the required packages
+
 #database setup
 in the root directory of the project you can find subway.sql
 
