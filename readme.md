@@ -13,6 +13,6 @@ execute this file to have the structure and data to make the app work
 
 #Login details for admin
 
-email: paul@jenda.nl
+email: paul@rovers.nl
 
 pass: admin
