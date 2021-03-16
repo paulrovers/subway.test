@@ -22,11 +22,11 @@ class Config
     const DB_PASSWORD = '';
     const SHOW_ERRORS = true;
     const MAIL_ERRORS = false;
-    const MAIL_HOST = 'mail.jenda.nl';
-    const MAIL_USER = 'paul@sitetesten.nl';
-    const MAIL_PASSWORD = 'paul345';
-    const SENDADDRESS = 'paul@sitetesten.nl';
-    const SENDNAME = 'Paul Rovers';
+    const MAIL_HOST = '';
+    const MAIL_USER = '';
+    const MAIL_PASSWORD = '';
+    const SENDADDRESS = '';
+    const SENDNAME = '';
 }
 
 ?>
