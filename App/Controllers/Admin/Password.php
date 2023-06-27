@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 use \App\Models\user;
-use Flash;
+use \Flash;
 
 class Password extends \Core\Admin
 {

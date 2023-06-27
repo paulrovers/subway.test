@@ -2,80 +2,66 @@
 
 namespace App\Models;
 
-class sandwiches extends \Core\ModelObject
+class sandwiches extends \Core\Model
 {
-    public $id;
-    public $order_id;
-    public $client_id;
-    public $key;
-    public $options;
-
-    function __construct()
+    public function GetById(int $id):array
     {
-        parent::SetTable('sandwiches');
-        parent::SetPrimaryKey('id');
-        parent::AddField('id');
-        parent::AddField('order_id');
-        parent::AddField('client_id');
-        parent::AddField('key');
-        parent::AddField('options');
+        $query = "SELECT * FROM `sandwiches` WHERE `id` = :id";
+        $array = [
+            'id' => $id
+        ];
+        $result = $this->dbQuery($query,$array);
+        return $result[0];
     }
 
-    public static function saveOptions($sandwich_id, $options)
+    public function saveSandwich(int $order_id, int $client_id, string $order):bool
     {
-        $sandwich = new sandwiches();
-        $sandwich->id = $sandwich_id;
-        $sandwich->options = $options;
-        $sandwich->Save();
+        $query = "INSERT INTO sandwiches (`order_id`,`client_id`,`options`) VALUES (:order_id, :client_id, :options)";
+        $array = [
+            'order_id' => $order_id,
+            'client_id' => $client_id,
+            'options' => $order
+        ];
+        $this->dbQuery($query,$array);
         return true;
     }
 
-    public static function saveSandwich($order_id, $client_id, $order)
+    public function updateSandwich(int $id, string $order):bool
     {
-        $sandwich = new sandwiches();
-        $sandwich->order_id = $order_id;
-        $sandwich->client_id = $client_id;
-        $sandwich->options = $order;
-        $sandwich->Insert();
+        $query = "UPDATE sandwiches SET `options` = :options WHERE id = :id";
+        $array = [
+            'id' => $id,
+            'options' => $order
+        ];
+        $this->dbQuery($query,$array);
         return true;
     }
 
-    public static function updateSandwich($id, $order)
+    public function GetAllFromOrderId(int $order_id):array
     {
-        $sandwich = new sandwiches();
-        $sandwich->id = $id;
-        $sandwich->options = $order;
-        $sandwich->Save();
-        return true;
+        $query = "SELECT * FROM `sandwiches` WHERE `order_id` = :id";
+        $array = [
+            'id' => $order_id
+        ];
+        return $this->dbQuery($query,$array);
     }
 
-    public static function GetAllFromOrderId($order_id)
+    public function GetAllFromClientId(int $client_id):array
     {
-        $sql = "SELECT * FROM `sandwiches` Where order_id='".$order_id."';";
-        $res = parent::dbQuery($sql);
-        $sandwiches = [];
-        while($data = mysqli_fetch_assoc($res)){
-            $sandwiches[] = $data;
-        }
-        return $sandwiches;
+        $query = "SELECT * FROM `sandwiches` WHERE `client_id` = :id ORDER BY id DESC LIMIT 10";
+        $array = [
+            'id' => $client_id
+        ];
+        return $this->dbQuery($query,$array);
     }
 
-    public static function GetAllFromClientId($client_id)
+    public function DeleteSandwich(int $sandwich_id):bool
     {
-        $sql = "SELECT * FROM `sandwiches` Where client_id='".$client_id."' order by `id` DESC LIMIT 10;";
-        $res = parent::dbQuery($sql);
-        $sandwiches = [];
-        while($data = mysqli_fetch_assoc($res)){
-            $sandwiches[] = $data;
-        }
-        return $sandwiches;
-    }
-
-    public static function DeleteSandwich($sandwich_id)
-    {
-        $sandwich = new sandwiches();
-        $sandwich->id = $sandwich_id;
-        $sandwich->Delete();
+        $query = "DELETE FROM `sandwiches` WHERE `id` = :id";
+        $array = [
+            'id' => $sandwich_id
+        ];
+        $this->dbQuery($query,$array);
         return true;
     }
 

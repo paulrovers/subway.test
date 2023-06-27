@@ -18,9 +18,8 @@ $router->add('inloggen/clients/delete/{id:[0-9]+}/', ['controller' => 'Admin\Cli
 $router->add('inloggen/password/', ['controller' => 'Admin\Password', 'action' => 'index']);
 $router->add('inloggen/orderdetails/{id:[0-9]+}/delete/{delid:[0-9]+}/', ['controller' => 'Admin\Orderdetails', 'action' => 'delete']);
 $router->add('inloggen/orderdetails/{id:[0-9]+}/', ['controller' => 'Admin\Orderdetails', 'action' => 'index']);
-$router->add('inloggen/sandwichoptions/', ['controller' => 'Admin\Sandwichoptions', 'action' => 'index']);
 $router->add('inloggen/', ['controller' => 'Login', 'action' => 'index']);
-$router->add('inloggen/logout/', ['controller' => 'Home', 'action' => 'logout']);
+$router->add('inloggen/logout/', ['controller' => 'login', 'action' => 'logout']);
 
 #homepage
 $router->add('', ['controller' => 'Webpages', 'action' => 'index']);

@@ -6,43 +6,23 @@ class Router
 {
     /**
      * Associative array of routes (the routing table)
-     * @var array
      */
     protected $routes = [];
 
     /**
      * Associative array of routes (the routing table)
-     * @var array
      */
     protected $redirectRoutes = [];
 
     /**
      * Parameters from the matched route
-     * @var array
      */
     protected $params = [];
 
     /**
-     * Parameters from the matched route
-     * @var array
-     */
-    protected $newpath = [];
-
-    /**
-     * Parameters from the matched route
-     * @var array
-     */
-    protected $capturegroups = [];	
-
-    /**
      * Add a route to the routing table
-     *
-     * @param string $route  The route URL
-     * @param array  $params Parameters (controller, action, etc.)
-     *
-     * @return void
      */
-    public function add($route, $params = [])
+    public function add(string $route, array $params = []):void
     {
         // Convert the route to a regular expression: escape forward slashes
         $route = preg_replace('/\//', '\\/', $route);
@@ -61,13 +41,8 @@ class Router
 
     /**
      * Add a route to the routing table
-     *
-     * @param string $route  The route URL
-     * @param string $newpath  The redirect path
-     *
-     * @return void
      */
-    public function addRedirect($route, $newpath)
+    public function addRedirect(string $route, string $newpath):void
     {
         // Convert the route to a regular expression: escape forward slashes
         $route = preg_replace('/\//', '\\/', $route);
@@ -87,10 +62,8 @@ class Router
 
     /**
      * Get all the routes from the routing table
-     *
-     * @return array
      */
-    public function getRoutes()
+    public function getRoutes():array
     {
         return $this->routes;
     }
@@ -98,12 +71,8 @@ class Router
     /**
      * Match the route to the routes in the routing table, setting the $params
      * property if a route is found.
-     *
-     * @param string $url The route URL
-     *
-     * @return boolean  true if a match found, false otherwise
      */
-    public function match($url)
+    public function match(string $url):bool
     {
 
 		foreach ($this->routes as $route => $params) {
@@ -125,67 +94,18 @@ class Router
     }
 
     /**
-     * Match the route to the redirectroutes in the routing table, setting the $newpath
-     * property if a route is found.
-     *
-     * @param string $url The route URL
-     *
-     * @return boolean  true if a match found, false otherwise
-     */
-	 
-    public function redirectMatch($url)
-    {
-        foreach ($this->redirectRoutes as $route => $newpath) {
-            if (preg_match($route, $url, $matches)) {
-                // Get named capture group values
-                foreach ($matches as $key => $match) {
-                   if (is_string($key)) {
-                        $this->capturegroups[$key] = $match;
-                    }
-                }
-                $this->newpath = $newpath;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    /**
      * Get the currently matched parameters
-     *
-     * @return array
      */
-    public function getParams()
+    public function getParams():array
     {
         return $this->params;
     }
 
     /**
-     * search for capturegroups and place them in newpath if needed
-     *
-     * @return string
-     */
-    public function addCapturegroups($newpath)
-    {
-		if(count($this->capturegroups) > 0){
-			foreach($this->capturegroups as $key => $value){
-				$this->newpath = preg_replace("/{".$key."}/",$value,$this->newpath);
-			}
-		}
-		return $this->newpath;
-    }
-
-    /**
      * Dispatch the route, creating the controller object and running the
      * action method
-     *
-     * @param string $url The route URL
-     *
-     * @return void
      */
-    public function dispatch($url)
+    public function dispatch(string $url):Controller
     {
         $url = $this->removeQueryStringVariables($url);
 
@@ -220,33 +140,10 @@ class Router
     }
 
     /**
-     * Redirect the route
-     *
-     * @param string $url The route URL
-     *
-     * @return void
-     */
-    public function redirect($url)
-    {
-        $url = $this->removeQueryStringVariables($url);
-
-        if ($this->redirectMatch($url)) {
-			header("HTTP/1.1 301 Moved Permanently"); 
-			header("Location: ".SYS_SITE_URI.$this->addCapturegroups($this->newpath));
-			exit;
-        } 
-    }
-
-
-    /**
      * Convert the string with hyphens to StudlyCaps,
      * e.g. post-authors => PostAuthors
-     *
-     * @param string $string The string to convert
-     *
-     * @return string
      */
-    protected function convertToStudlyCaps($string)
+    protected function convertToStudlyCaps(string $string):string
     {
         return str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
     }
@@ -254,12 +151,8 @@ class Router
     /**
      * Convert the string with hyphens to camelCase,
      * e.g. add-new => addNew
-     *
-     * @param string $string The string to convert
-     *
-     * @return string
      */
-    protected function convertToCamelCase($string)
+    protected function convertToCamelCase(string $string):string
     {
         return lcfirst($this->convertToStudlyCaps($string));
     }
@@ -282,12 +175,8 @@ class Router
      * A URL of the format localhost/?page (one variable name, no value) won't
      * work however. (NB. The .htaccess file converts the first ? to a & when
      * it's passed through to the $_SERVER variable).
-     *
-     * @param string $url The full URL
-     *
-     * @return string The URL with the query string variables removed
      */
-    protected function removeQueryStringVariables($url)
+    protected function removeQueryStringVariables(string $url):string
     {
         if ($url != '') {
             $parts = explode('&', $url, 2);
@@ -305,10 +194,8 @@ class Router
     /**
      * Get the namespace for the controller class. The namespace defined in the
      * route parameters is added if present.
-     *
-     * @return string The request URL
      */
-    protected function getNamespace()
+    protected function getNamespace():string
     {
         $namespace = 'App\Controllers\\';
 

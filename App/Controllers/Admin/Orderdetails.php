@@ -9,7 +9,7 @@ class Orderdetails extends \Core\Admin
         $sandwiches = $this->CreateCompleteOrder($this->route_params['id']);
 
         $ordersobj = new \App\Models\orders();
-        $order = $ordersobj->Get($this->route_params['id']);
+        $order = $ordersobj->GetAllById($this->route_params['id']);
 
         $this->tpl->assign('sandwiches', $sandwiches);
         $this->tpl->assign('order', $order);
@@ -17,11 +17,9 @@ class Orderdetails extends \Core\Admin
     }
 
     /**
-     * @param $order_id
-     * @return array
      * Add name & email to sandwiches array
      */
-    private function CreateCompleteOrder($order_id)
+    private function CreateCompleteOrder(int $order_id):array
     {
         $sandwichobj = new \App\Models\sandwiches();
         $sandwiches = $sandwichobj->GetAllFromOrderId($order_id);
@@ -40,7 +38,6 @@ class Orderdetails extends \Core\Admin
      */
     public function deleteAction()
     {
-        $sandwichobj = new \App\Models\sandwiches();
         $ordersobj = new \App\Models\orders();
 
         if($ordersobj->isOpenOrder($this->route_params['id']))

@@ -2,49 +2,58 @@
 
 namespace App\Models;
 
-class orders extends \Core\ModelObject
+class orders extends \Core\Model
 {
-    public $id;
-    public $status;
-    public $date;
-
-    function __construct()
+    public function GetAllById(int $id):array
     {
-        parent::SetTable('orders');
-        parent::SetPrimaryKey('id');
-        parent::AddField('id');
-        parent::AddField('status');
-        parent::AddField('date');
-        parent::AddField('key');
+        $query = "SELECT * FROM orders WHERE id = :id";
+        $array = [
+            'id' => $id
+        ];
+        $result = $this->dbQuery($query,$array);
+
+        if(count($result) > 0){
+            return $result[0];
+        }else{
+            return [];
+        }
     }
 
-    public static function GetLastOpenStatus()
+    public function GetByKey(string $key):array
     {
-        $sql = "SELECT * FROM `orders` Where 1 Order by id desc LIMIT 1;";
-        $res = parent::dbQuery($sql);
-        if($data = mysqli_fetch_assoc($res)){
-            return $data['status'];
+        $query = "SELECT * FROM orders WHERE `key` = :key LIMIT 1";
+        $array = ['key' => $key];
+        $result = $this->dbQuery($query,$array);
+        return $result[0];
+    }
+
+    public function GetLastOpenStatus():mixed
+    {
+        $query = "SELECT * FROM orders ORDER BY id DESC LIMIT 1";
+        $array = [];
+        $result = $this->dbQuery($query,$array);
+        if(count($result) > 0){
+            return $result[0]['status'];
         }else{
             return 'closed';
         }
     }
 
-    public static function GetAllDesc()
+    public function GetAllDesc():array
     {
-        $sql = "SELECT * FROM `orders` Where 1 Order by id desc;";
-        $res = parent::dbQuery($sql);
-        $orders = [];
-        while($data = mysqli_fetch_assoc($res)){
-            $orders[] = $data;
-        }
-        return $orders;
+        $query = "SELECT * FROM orders ORDER BY id DESC";
+        $array = [];
+        $result = $this->dbQuery($query,$array);
+        return $result;
     }
 
-    public static function isOpenOrder($order_id)
+    public function isOpenOrder(int $order_id):bool
     {
-        $sql = "SELECT * FROM `orders` Where id = '".$order_id."';";
-        $res = parent::dbQuery($sql);
-        $data = mysqli_fetch_assoc($res);
+        $query = "SELECT * FROM orders WHERE `id` = :id LIMIT 1";
+        $array = ['id' => $order_id];
+        $result = $this->dbQuery($query,$array);
+        $data = $result[0];
+
         if($data['status'] === 'open'){
             return true;
         }else{
@@ -52,11 +61,12 @@ class orders extends \Core\ModelObject
         }
     }
 
-    public static function isOpenOrderKey($key)
+    public function isOpenOrderKey(string $key)
     {
-        $sql = "SELECT * FROM `orders` Where `key` = '".$key."';";
-        $res = parent::dbQuery($sql);
-        $data = mysqli_fetch_assoc($res);
+        $query = "SELECT * FROM orders WHERE `key` = :key LIMIT 1";
+        $array = ['key' => $key];
+        $result = $this->dbQuery($query,$array);
+        $data = $result[0];
         if($data['status'] === 'open'){
             return true;
         }else{
@@ -64,55 +74,57 @@ class orders extends \Core\ModelObject
         }
     }
 
-    public static function isValidOrderKey($key)
+    public function isValidOrderKey(string $key)
     {
-        $sql = "SELECT * FROM `orders` Where `key` = '".$key."';";
-        $res = parent::dbQuery($sql);
-        if(mysqli_num_rows($res) === 1){
+        $query = "SELECT * FROM orders WHERE `key` = :key LIMIT 1";
+        $array = ['key' => $key];
+        $result = $this->dbQuery($query,$array);
+
+        if(count($result) > 0){
             return true;
         }else{
             return false;
         }
     }
 
-    public static function closeOrder($id)
+    public function closeOrder(int $id):bool
     {
-        $order = new orders();
-        $order->id = $id;
-        $order->status = 'closed';
-        $order->Save();
+        $query = "UPDATE orders SET `status` = 'closed' WHERE id = :id";
+        $array = [
+            'id' => $id
+        ];
+        $this->dbQuery($query,$array);
         return true;
     }
 
-    public static function newOrder($key)
+    public function newOrder(string $key):bool
     {
-        $order = new orders();
-        $order->status = 'open';
-        $order->key = $key;
-        $order->Insert();
+        $query = "INSERT INTO orders (`key`, `status`) VALUES (:key, 'open')";
+        $array = [
+            'key' => $key
+        ];
+        $this->dbQuery($query,$array);
         return true;
     }
 
-    public static function GetLastOrderKey()
+    public function GetLastOrderKey()
     {
-        $sql = "SELECT * FROM `orders` Where 1 order by `id` DESC LIMIT 1;";
-        $res = parent::dbQuery($sql);
-        $order = mysqli_fetch_assoc($res);
-        return $order['key'];
+        $query = "SELECT * FROM `orders` ORDER BY `id` DESC LIMIT 1;";
+        $array = [];
+        $result = $this->dbQuery($query,$array);
+        return $result[0]['key'];
     }
 
     public function noOpenOrders()
     {
-        $sql = "SELECT * FROM `orders` Where `status` = 'open';";
-        $res = parent::dbQuery($sql);
-        if(mysqli_num_rows($res) > 0){
+        $query = "SELECT * FROM `orders` Where `status` = 'open'";
+        $array = [];
+        $result = $this->dbQuery($query,$array);
+
+        if(count($result) > 0){
             return false;
         }else{
             return true;
         }
     }
-
-
-
-
 }

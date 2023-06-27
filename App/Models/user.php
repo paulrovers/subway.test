@@ -2,90 +2,82 @@
 
 namespace App\Models;
 
-class user extends \Core\ModelObject
+class user extends \Core\Model
 {
-    public $id;
-    public $name;
-    public $email;
-    public $password_hash;
-    public $password_reset_hash;
-    public $password_reset_expires_at;
-    public $activation_hash;
-    public $is_active;
-
-    function __construct()
+    /**
+     * Get user account by email
+     */
+    public function getByEmail(string $email):array
     {
-        parent::SetTable('users');
-        parent::SetPrimaryKey('id');
-        parent::AddField('id');
-        parent::AddField('name');
-        parent::AddField('email');
-        parent::AddField('password_hash');
-        parent::AddField('password_reset_hash');
-        parent::AddField('password_reset_expires_at');
-        parent::AddField('activation_hash');
-        parent::AddField('is_active');
+        $query = "SELECT * FROM users WHERE email = :email LIMIT 1";
+        $array = ['email' => $email];
+        $result = $this->dbQuery($query,$array);
+        return $result[0];
     }
 
-    public static function getByEmail($email)
+    /**
+     * Get user account by id
+     */
+    public function getById(int $userId):array
     {
-        $user = new user();
-        $data =  $user->Get($email, 'email');
-        return $data;
-    }
-	
-    public static function getById($id)
-    {
-        $user = new user();
-        $data = $user->Get($id, 'id');
-        return $data;
+        $query = "SELECT * FROM users WHERE id = :id LIMIT 1";
+        $array = ['id' => $userId];
+        $result = $this->dbQuery($query,$array);
+        return $result[0];
     }
 
-	public static function CheckUser($email,$pass)
-	{
-		//check of email adres bestaat en ophalen hash als dat zo is
-		$sql = sprintf('SELECT * FROM `users` WHERE `email` = \'%s\' LIMIT 1;', addslashes($email));
-		$res = parent::dbQuery($sql);
-		if (mysqli_num_rows($res) == 0){
-			return false;
+    /**
+     * Check if user exists
+     */
+	public function CheckUser(string $email,string $pass):mixed
+    {
+        $query = "SELECT * FROM users WHERE email = :email LIMIT 1";
+        $array = ['email' => $email];
+        $result = $this->dbQuery($query,$array);
+        if (count($result) == 1){
+            if(password_verify($pass,$result[0]['password_hash'])) {
+                return $result[0];
+            }
         }else{
-			$data = mysqli_fetch_assoc($res);
-			
-			if(password_verify($pass,$data['password_hash'])){
-				$user = new user();
-				$user->SetFieldsFromArray($data);
-				return $user;
-			}else{
-				return false;
-			}
-		}
+            return false;
+        }
 		//create hash
 		//$options = ['cost' => 14];
 		//$hash = password_hash($hash,PASSWORD_BCRYPT, $options);
+        return false;
 	}
-	
-	public static function saveUser($form)
+
+    /**
+     * Update user data
+     */
+	public function saveUser(array $form):bool
 	{
-		$user = new user();
-		$user->id = $form['id'];
-		$user->name = $form['naam'];
-		$user->email = $form['email'];
-		$user->Save();
-		return true;
+        $query = "UPDATE users SET `name` = :name, `email` = :email WHERE id = :id";
+        $array = [
+            'id' => $form['id'],
+            'name' => $form['naam'],
+            'email' => $form['email']
+        ];
+        $this->dbQuery($query,$array);
+        return true;
 	}
-	
-	public static function savePass($form)
+
+    /**
+     * Update new password
+     */
+	public function savePass(array $form):bool
 	{
 		//create hash
 		$options = ['cost' => 14];
 		$hash = password_hash($form['password_hash'],PASSWORD_BCRYPT, $options);
-		
-		//save password hash
-		$user = new user();
-		$user->id = $form['id'];
-		$user->password_hash = $hash;
-		$user->Save();
-		return true;
+
+        $query = "UPDATE users SET `password_hash` = :hash WHERE id = :id";
+        $array = [
+            'id' => $form['id'],
+            'hash' => $hash
+        ];
+        $this->dbQuery($query,$array);
+        return true;
 	}
 	
 } 

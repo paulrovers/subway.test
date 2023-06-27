@@ -2,8 +2,10 @@
 
 namespace App\Controllers\Admin;
 
+use App\Models\orders;
 use Core\Mailer;
 use Smarty;
+use Classes\Password;
 
 class Home extends \Core\Admin
 {
@@ -27,10 +29,10 @@ class Home extends \Core\Admin
      */
     public function newAction()
     {
-        $ordersobj = new \App\Models\orders();
-        $passwordobj = new \password();
+        $ordersobj = new orders();
 
         if($ordersobj->noOpenOrders()) {
+            $passwordobj = new Password();
             $ordersobj->newOrder($passwordobj->generate(12));
             $order_key = $ordersobj->GetLastOrderKey();
             /**
@@ -49,7 +51,7 @@ class Home extends \Core\Admin
             foreach ($clients as $key => $client) {
                 $smarty->assign('order_key', $order_key);
                 $smarty->assign('client_id', $client['key']);
-                $smarty->assign('main_url', SYS_SITE_URI);
+                $smarty->assign('main_url', $_ENV['APP_URL']);
                 $mail->sethtml($smarty->fetch($smarty_template_path . 'Email/neworder.tpl'));
                 $mail->setaddress($client['email']);
                 $mail->setname($client['name']);

@@ -1,6 +1,8 @@
 <?php
 
-Class password{
+namespace Classes;
+
+Class Password{
 	
 	private $password = '';
 

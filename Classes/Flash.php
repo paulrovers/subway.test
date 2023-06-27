@@ -1,10 +1,12 @@
 <?php
 
+namespace Classes;
+
 /**
  * Flash notification messages: messages for one-time display using the session
  * for storage between requests.
  */
-class flash
+class Flash
 {
     const SUCCESS = 'success';
     const INFO = 'info';

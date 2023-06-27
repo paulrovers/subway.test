@@ -2,31 +2,13 @@
 
 namespace App\Models;
 
-class sandwichoptions extends \Core\ModelObject
+class sandwichoptions extends \Core\Model
 {
-    public $id;
-    public $type;
-    public $options;
-
-    function __construct()
+    public function getSandwichOptions()
     {
-        parent::SetTable('sandwichoptions');
-        parent::SetPrimaryKey('id');
-        parent::AddField('id');
-        parent::AddField('type');
-        parent::AddField('options');
+        $query = "SELECT * FROM sandwichoptions";
+        $array = [];
+        $result = $this->dbQuery($query,$array);
+        return $result;
     }
-
-    public static function getSandwichOptionData($value, $field='')
-    {
-        $sandwichoption = new sandwichoptions();
-        return $sandwichoption->Get($value, $field);
-    }
-
-    public static function getSandwiches()
-    {
-        $sandwichoptions = new sandwichoptions();
-        return $sandwichoptions->GetAll();
-    }
-
 }

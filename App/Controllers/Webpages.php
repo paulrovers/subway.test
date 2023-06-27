@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Models\pages;
 
 class Webpages extends \Core\Controller
@@ -17,14 +18,14 @@ class Webpages extends \Core\Controller
         }
 
         $pagesobj = new pages();
-        $pages_data = $pagesobj->Get($this->route_params['name'], 'url');
+        $pages_data = $pagesobj->GetPageByUrl($this->route_params['name']);
 
         if($pages_data === false){
             $this->tpl->display('error404.tpl');
             exit;
         }
 
-		$this->strPageurl = PREFIX.SYS_SITE_NAME.'/'.$pages_data['url'].'/';
+		$this->strPageurl = $_ENV['APP_URL'].$pages_data['url'].'/';
 			
 		$this->strTitle = $pages_data['meta_title'];
 		$this->strDescription = $pages_data['meta_description'];

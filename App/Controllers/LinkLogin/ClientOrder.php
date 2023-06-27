@@ -2,10 +2,10 @@
 
 namespace App\Controllers\LinkLogin;
 
-use App\Config\Smarty\SmartyTemplate;
 use App\Models\orders;
 use App\Models\sandwiches;
 use App\Models\sandwichoptions;
+use Smarty;
 
 class ClientOrder extends \Core\LinkLogin
 {
@@ -13,11 +13,18 @@ class ClientOrder extends \Core\LinkLogin
     private $extras='';
     private $vegetables='';
     private $sauce='';
+    public Smarty $tpl;
 
     public function __CONSTRUCT($route_params)
     {
         $this->route_params = $route_params;
-        $this->tpl = new SmartyTemplate;
+        $this->tpl = new Smarty;
+        $this->tpl->setTemplateDir('../App/Views');
+        $this->tpl->setCompileDir('../App/Views/Compile');
+        $this->tpl->setCacheDir('../App/Views/Cache');
+        $this->tpl->caching = 0;
+        $this->tpl->cache_lifetime = 300;
+
         $this->standalone = '1';
     }
 
@@ -31,7 +38,7 @@ class ClientOrder extends \Core\LinkLogin
             $_SESSION['order'] = true;
         }else{
             $optionsobj = new sandwichoptions();
-            $options = $optionsobj->GetAll();
+            $options = $optionsobj->getSandwichOptions();
         }
 
         $previousOrders = $this->GetOrderList();
@@ -48,7 +55,6 @@ class ClientOrder extends \Core\LinkLogin
 
         if(isset($_POST['submit'])){
             $order = $this->CreateOrder($_POST);
-            print_r($order);
             $sandwichobj = new sandwiches();
             $sandwichobj->updateSandwich($sandwichid,$order);
             $_SESSION['order'] = true;
@@ -56,7 +62,7 @@ class ClientOrder extends \Core\LinkLogin
         }
 
         $sandwichobj = new sandwiches();
-        $sandwich = $sandwichobj->Get($sandwichid);
+        $sandwich = $sandwichobj->GetById($sandwichid);
 
         $options = $this->AddSelectedMarkers($sandwichid);
 
@@ -69,9 +75,9 @@ class ClientOrder extends \Core\LinkLogin
     private function AddSelectedMarkers($sandwichid)
     {
         $optionsobj = new sandwichoptions();
-        $options = $optionsobj->GetAll();
+        $options = $optionsobj->getSandwichOptions();
         $sandwichobj = new sandwiches();
-        $sandwich = $sandwichobj->Get($sandwichid);
+        $sandwich = $sandwichobj->GetById($sandwichid);
 
         //make sandwich array searchable
         $array = unserialize($sandwich['options']);
@@ -117,7 +123,7 @@ class ClientOrder extends \Core\LinkLogin
         $orderobj = new orders();
 
         foreach($previousOrders as $key => $sandwich){
-            $order = $orderobj->Get($sandwich['order_id']);
+            $order = $orderobj->GetAllById($sandwich['order_id']);
             $previousOrders[$key]['date'] = $order['date'];
             $previousOrders[$key]['status'] = $order['status'];
         }
@@ -126,12 +132,10 @@ class ClientOrder extends \Core\LinkLogin
     }
 
     /**
-     * @param $formContent
-     * @return string
      * Set extras, vegetables & sauce details for current sandwich
      * and return the serialized details for saving in database.
      */
-    private function CreateOrder($formContent)
+    private function CreateOrder(array $formContent):string
     {
         if(isset($formContent['extras'])){
             foreach($formContent['extras'] as $key => $value){

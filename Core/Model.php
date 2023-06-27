@@ -1,43 +1,44 @@
 <?php
 
 namespace Core;
-
 use PDO;
-use App\Config;
-
+use PDOException;
 
 class Model
 {
-
-     private $resLastResource;
-
-     /**
-      * Connect to database with given credentials
-      * @param string Hostname
-      * @param string Username
-      * @param string Password
-      * @param string Database
-      * @return void
-      */
-
-    public static function Connect()
+    /**
+     * Connect to database using PDO
+     * Settings from dotenv are used to connect to database
+     */
+    protected function connect():PDO
     {
-        try
-        {
-            if (!@mysqli_connect(Config::DB_HOST,Config::DB_USER,Config::DB_PASSWORD,Config::DB_NAME))
-            {
-                $connectivity = mysqli_connect(Config::DB_HOST,Config::DB_USER,Config::DB_PASSWORD,Config::DB_NAME);
-                throw new Exception(mysqli_error($connectivity));
-            }
-            else{
-
-                return $connectivity = mysqli_connect(Config::DB_HOST,Config::DB_USER,Config::DB_PASSWORD,Config::DB_NAME);
-            }
-
+        try {
+            $options = [];
+            $conn = new PDO("mysql:host=".$_ENV['DB_HOST'].";dbname=".$_ENV['DB_NAME'].";charset=utf8;port=".$_ENV['DB_PORT'].";", $_ENV['DB_USER'], $_ENV['DB_PASSWORD'],$options);
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $conn;
+        } catch(PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
         }
-        catch (Exception $strError)
-        {
-            Error::SystemFailure($strError, true, true);
+    }
+
+    /**
+     * execute a database query
+     */
+    public function dbQuery(string $pdo_prepaired_query, array $pdo_field_variables):array
+    {
+        $pdo = $this->connect();
+        $stmt = $pdo->prepare($pdo_prepaired_query);
+        $stmt->execute($pdo_field_variables);
+
+        //if query is not a select no need to fetch the data
+        if(substr(strtolower($pdo_prepaired_query),0,6) != 'select'){
+            return [];
+        }else{
+            return $stmt->fetchAll();
         }
     }
 }
+
+

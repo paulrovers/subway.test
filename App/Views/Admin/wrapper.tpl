@@ -91,8 +91,7 @@
                         <ol class="tb_menu2">
                           <li><a href="{$admin_url}" class="user_email">Orders</a>
                               <ol>
-                                  <li><a href="{$admin_url}clients">Clients</a></li>
-                                  <li><a href="{$admin_url}sandwichoptions/">Sandwich options</a></li>
+                                  <li><a href="{$admin_url}clients/">Clients</a></li>
                                   <li><a href="{$admin_url}account/">Account</a></li>
                                   <li><a href="{$admin_url}password/">Change password</a></li>
                               </ol>

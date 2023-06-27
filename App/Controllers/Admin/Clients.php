@@ -2,9 +2,6 @@
 
 namespace App\Controllers\Admin;
 
-use flash;
-use password;
-
 class Clients extends \Core\Admin
 {
     public function indexAction()
@@ -15,7 +12,7 @@ class Clients extends \Core\Admin
          * check if form fields are used and save values
          */
         if(isset($_POST['submit']) && !empty($_POST['email']) && !empty($_POST['name'])){
-            $passwordobj = new password();
+            $passwordobj = new \Password();
             $newclient = array(
                 'name' => $_POST['name'],
                 'email' => $_POST['email'],
@@ -23,10 +20,10 @@ class Clients extends \Core\Admin
             );
 
             if($clientsobj->saveClient($newclient)){
-                Flash::addMessage('The new client has been added.');
+                \Flash::addMessage('The new client has been added.');
             }
         }elseif(isset($_POST['submit'])){
-            Flash::addMessage('Please fill in all fields to continue.', Flash::WARNING);
+            \Flash::addMessage('Please fill in all fields to continue.', \Flash::WARNING);
         }
 
         /**

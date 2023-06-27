@@ -2,20 +2,55 @@
 
 namespace Core;
 
-use App\Config\Smarty\SmartyTemplate;
-use App\Auth;
+use Smarty;
 
 abstract class Controller
 {
 
     protected $route_params = [];
-
+    public Smarty $tpl;
 
     public function __construct($route_params)
     {
         $this->route_params = $route_params;
-        $this->tpl = new SmartyTemplate;
+        $this->tpl = new Smarty;
+        $this->tpl->setTemplateDir('../App/Views');
+        $this->tpl->setCompileDir('../App/Views/Compile');
+        $this->tpl->setCacheDir('../App/Views/Cache');
+        $this->tpl->caching = 0;
+        $this->tpl->cache_lifetime = 300;
+    }
 
+    public function LoadTemplate(string $strBufferedContent,Controller $controllerobject):void
+    {
+        $this->tpl->assign('site_url', $_ENV['APP_URL']);
+        $this->tpl->assign('admin_url', $_ENV['APP_URL'].'inloggen/');
+        $this->tpl->assign('buffered_content', $strBufferedContent);
+        $this->tpl->assign('title',$controllerobject->strTitle);
+        $this->tpl->assign('description',$controllerobject->strDescription);
+        $this->tpl->assign('pageurl',$controllerobject->strPageurl);
+
+        if(isset($_SESSION)){
+            if(isset($_SESSION['flash_notifications'])){
+                $flash_notifications = $_SESSION['flash_notifications'];
+            }else{
+                $flash_notifications = '';
+            }
+            $this->tpl->assign('flash_notifications', $flash_notifications);
+        }
+
+        if(isset($_SESSION['user_id'])){
+            $wrapper = "Admin/wrapper.tpl";
+        }else{
+            $wrapper = "wrapper.tpl";
+        }
+
+        if(isset($controllerobject->standalone) && $controllerobject->standalone == 1){
+            $wrapper = "empty.tpl";
+        }
+
+        $this->tpl->display($wrapper);
+        exit;
     }
 
     public function __destruct()
@@ -25,46 +60,15 @@ abstract class Controller
 		}
     }
 
-    /**
-     * @param $name
-     * @param $args
-     * @throws \Exception
-     */
-    public function __call($name, $args)
+    public function __call(string $name, array $args)
     {
         $method = $name . 'Action';
 
         if (method_exists($this, $method)) {
-            if ($this->before() !== false) {
-                call_user_func_array([$this, $method], $args);
-                $this->after();
-            }
+            call_user_func_array([$this, $method], $args);
         } else {
             throw new \Exception("Method $method not found in controller " . get_class($this));
         }
-    }
-
-    /**
-     * filter incoming data
-     */
-    protected function before()
-    {
-		//sanitize data
-		$_GET   = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
-		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-		$_SERVER  = filter_input_array(INPUT_SERVER, FILTER_SANITIZE_STRING);
-		$_ENV  = filter_input_array(INPUT_ENV, FILTER_SANITIZE_STRING);
-		$_COOKIE  = filter_input_array(INPUT_COOKIE, FILTER_SANITIZE_STRING);	
-
-		foreach($_SESSION as $name => $value){
-			$_SESSION[$name] = filter_var($_SESSION[$name]);
-		}
-		
-    }
-
-    protected function after()
-    {		
-
     }
 
     /**
@@ -74,7 +78,7 @@ abstract class Controller
 	public function requireLogin()
     {
 		if(!isset($_SESSION['user_id'])){
-			Auth::logout();
+			Authenticate::logout();
             header("Location: /");
             exit;
 		}
@@ -87,7 +91,7 @@ abstract class Controller
     public function requireLoginLink()
     {
         if(!isset($_SESSION['order_id'])){
-            Auth::logout();
+            Authenticate::logout();
             header("Location: /order/1/1/");
             exit;
         }

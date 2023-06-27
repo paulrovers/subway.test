@@ -7,15 +7,8 @@ class Error
 
     /**
      * Error handler. Convert all errors to Exceptions by throwing an ErrorException.
-     *
-     * @param int $level  Error level
-     * @param string $message  Error message
-     * @param string $file  Filename the error was raised in
-     * @param int $line  Line number in the file
-     *
-     * @return void
      */
-    public static function errorHandler($level, $message, $file, $line)
+    public static function errorHandler(int $level, string $message, string $file, int $line):void
     {
         if (error_reporting() !== 0) {  // to keep the @ operator working
             throw new \ErrorException($message, 0, $level, $file, $line);
@@ -24,12 +17,8 @@ class Error
 
     /**
      * Exception handler.
-     *
-     * @param Exception $exception  The exception
-     *
-     * @return void
      */
-    public static function exceptionHandler($exception)
+    public static function exceptionHandler($exception):void
     {
         // Code is 404 (not found) or 500 (general error)
         $code = $exception->getCode();
@@ -38,7 +27,7 @@ class Error
         }
         http_response_code($code);
 
-        if (\App\Config::SHOW_ERRORS) {
+        if ($_ENV['SHOW_ERRORS']) {
             echo "<h1>Fatal error</h1>";
             echo "<p>Uncaught exception: '" . get_class($exception) . "'</p>";
             echo "<p>Message: '" . $exception->getMessage() . "'</p>";
@@ -53,20 +42,14 @@ class Error
             $message .= "\nStack trace: " . $exception->getTraceAsString();
             $message .= "\nThrown in '" . $exception->getFile() . "' on line " . $exception->getLine();
 
-			self::SystemFailure($message,true,\App\Config::MAIL_ERRORS);
+			self::SystemFailure($message,true,$_ENV['MAIL_ERRORS']);
         }
     }
 
-    // User error
-    static $strError;
-
     /**
      * Write line to log file
-     * @param string The line to write
-     * @param string The file to write to
-     * @returns boolean
      */
-    static function WriteLogLine($strLogLine, $strLogFileName)
+    static function WriteLogLine(string $strLogLine, string $strLogFileName):void
     {
         $resLogFile = fopen($strLogFileName, 'a');
         fwrite($resLogFile, $strLogLine . "\r\n");
@@ -75,21 +58,16 @@ class Error
 
     /**
      * Show a nice error to user
-     * @param string
-     * @return void
      */
-    static function UserException ()
+    static function UserException ():void
     {
         die('Er is een interne fout opgetreden. Een ogenblik geduld a.u.b.');
     }
 
     /**
      * Report system failures to administrator(s)
-     * @param string Error message
-     * @param boolean Should it be logged, or just mailed? (optional)
-     * @return boolean
      */
-    static function SystemFailure ($strErrorMessage, $boolLogged = true, $boolMail = false)
+    static function SystemFailure (string $strErrorMessage, bool $boolLogged = true, bool $boolMail = false):void
     {
         $strLogLine = '[' . date('d-m-Y @ H:i') . ' on ' . $_SERVER["REQUEST_URI"] . '] ' . $strErrorMessage;
 
@@ -97,7 +75,7 @@ class Error
             self::WriteLogLine($strLogLine, '../Logs/failure.log');
 
         if ($boolMail)
-            mail(SYS_ADMIN, 'SYSTEM FAILURE ON ' . SYS_SITE_NAME . ' (' . SYS_SITE_URI . ')', $strLogLine, 'From:'. SYS_ADMIN);
+            mail($_ENV['SYS_ADMIN'], 'SYSTEM FAILURE ON ' . $_ENV['SYS_SITE_NAME'] . ' (' . $_ENV['SYS_SITE_URI'] . ')', $strLogLine);
 
         self::UserException();
     }

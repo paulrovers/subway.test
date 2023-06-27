@@ -1,9 +1,13 @@
+#leave out passwords
+.env
+
 # Cache, session files and logs
 /logs/*
 /public/templates_c/*
+/App/Views/Compile/
 
 # PHPstorm
-!.idea
+.idea
 
 # Managed by Composer
 /vendor/

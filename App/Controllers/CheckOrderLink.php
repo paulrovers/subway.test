@@ -1,23 +1,26 @@
 <?php
 
 namespace App\Controllers;
-use App\Config\Smarty\SmartyTemplate;
+use Core\Authenticate;
 use App\Models\clients;
 use App\Models\orders;
-use \App\Auth;
 
 class CheckOrderLink extends \Core\Controller
 {
-
     public $strTitle = '';
     public $strDescription = '';
-    public $strPageurl = PREFIX.SYS_SITE_NAME;
+    public $strPageurl = '';
 
     public function __CONSTRUCT($route_params)
     {
         $this->route_params = $route_params;
-        $this->tpl = new SmartyTemplate;
         $this->standalone = '1';
+        $this->tpl = new \Smarty();
+        $this->tpl->setTemplateDir('../App/Views');
+        $this->tpl->setCompileDir('../App/Views/Compile');
+        $this->tpl->setCacheDir('../App/Views/Cache');
+        $this->tpl->caching = 0;
+        $this->tpl->cache_lifetime = 300;
     }
 
     public function indexAction()
@@ -25,9 +28,9 @@ class CheckOrderLink extends \Core\Controller
         if($this->Checklink($this->route_params['orderkey'],$this->route_params['clientkey']))
         {
             $orderobj = new orders();
-            $order = $orderobj->Get($this->route_params['orderkey'],'key');
+            $order = $orderobj->GetByKey($this->route_params['orderkey']);
             $clientobj = new clients();
-            $client = $clientobj->Get($this->route_params['clientkey'],'key');
+            $client = $clientobj->GetByKey($this->route_params['clientkey']);
 
             $sessionvars = array(
                 'order_id' => $order['id'],
@@ -38,21 +41,17 @@ class CheckOrderLink extends \Core\Controller
             /**
              * login and redirect to orderpage
              */
-            Auth::loginLink($sessionvars);
+            Authenticate::loginLink($sessionvars);
             header("Location: /order/".$order['id']."/");
         }else{
             echo 'Link failed';
         }
-
     }
 
     /**
-     * @param $orderkey
-     * @param $clientkey
-     * @return bool
      * Check if the orderkey and clientkey are valid and the order is still open
      */
-    public function Checklink($orderkey, $clientkey)
+    public function Checklink(string $orderkey, string $clientkey):bool
     {
         $order = new orders();
         $client = new clients();
@@ -63,8 +62,5 @@ class CheckOrderLink extends \Core\Controller
         }else{
             return false;
         }
-
     }
-
-
 }

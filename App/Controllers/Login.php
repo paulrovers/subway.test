@@ -1,21 +1,24 @@
 <?php
 
 namespace App\Controllers;
-use \App\Models\user;
-use \App\Auth;
-use Flash;
 
-class login extends \Core\Controller
+use App\Models\user;
+use Core\Authenticate;
+use Classes\Flash;
+
+class Login extends \Core\Controller
 {
     public $strTitle = 'Login';
     public $strDescription = 'Login';
-	public $strPageurl = PREFIX.SYS_SITE_NAME.'/inloggen/';
+	public $strPageurl = '';
 
     public function indexAction()
     {
-		
-		if (isset($_POST['email']) && isset($_POST['password']) &&  $user = user::checkUser($_POST['email'], $_POST['password'])) {
-			Auth::login($user);
+		$this->strPageurl = $_ENV['APP_URL'].'inloggen/';
+        $userObj = new user();
+
+		if (isset($_POST['email']) && isset($_POST['password']) &&  $user = $userObj->checkUser($_POST['email'], $_POST['password'])) {
+            Authenticate::login($user);
 			header("Location: /inloggen/home/");
 		}elseif(isset($_SESSION['user_id'])){
 			header("Location: /inloggen/home/");
@@ -31,9 +34,9 @@ class login extends \Core\Controller
 
     public function logoutAction()
     {
-            Auth::logout();
-            header("Location: /");
-			exit;
+        Authenticate::logout();
+        header("Location: /");
+		exit;
     }
 
 }

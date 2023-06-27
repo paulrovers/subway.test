@@ -8,7 +8,7 @@
 
 {if $openorder === 'closed'}
     <div class="button" style="overflow:hidden;">
-        <a href="new" class="button">Start new order</a>
+        <a href="new/" class="button">Start new order</a>
     </div>
 {/if}
 

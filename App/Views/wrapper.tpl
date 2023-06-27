@@ -61,7 +61,7 @@ list-style:none;
         <li class="top-menu">
             <ul>
                 <li><a href="{$site_url}">Home</a></li>
-                <li><a href="{$site_url}inloggen">Login</a></li>
+                <li><a href="{$site_url}inloggen/">Login</a></li>
             </ul>
         </li>
     </ul>
