@@ -7,7 +7,7 @@
 /App/Views/Compile/
 
 # PHPstorm
-.idea
+/.idea/
 
 # Managed by Composer
 /vendor/
