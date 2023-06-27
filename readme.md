@@ -11,6 +11,7 @@
 
 #install project
 - upload the files to your hosting and make the /public/ path your root hosting directory
+- run composer install to get all vendor packages
 - change the filename .env_example to .env and fill in the database and smtp details
 - execute the subway.sql file in your database
 - add a line to your hosts file:  YourServerIp subway.test
